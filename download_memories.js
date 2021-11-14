@@ -3,7 +3,7 @@ const { JSDOM } = jsdom;
 const fs = require("fs");
 const request = require('request');
 
-function downloadMemories(url, name) {
+function downloadMemories(url, date) {
 	const parts = url.split("?");
 
     const baseURL = parts[0];
@@ -27,9 +27,16 @@ function downloadMemories(url, name) {
         var fetch = request(success);
         fetch.on('response',  function (res) {
             const queryIndex = success.indexOf('?');
-            const dotIndex = success.lastIndexOf('.',queryIndex);
-            const ext = success.substring(dotIndex, queryIndex);
-            res.pipe(fs.createWriteStream('./' + name + ext));
+            const slashIndex = success.lastIndexOf('/',queryIndex);
+            const name = success.substring(slashIndex, queryIndex);
+            const file = fs.createWriteStream('./output/' + name);
+            const stream = res.pipe(file);
+            stream.on('finish', 
+                () => fs.utimes('./output/' + name, date, date, (err) => {
+                    if (err)
+                        console.log(err)
+                })
+            );
         });
     });
 }
@@ -57,21 +64,13 @@ domProm.then((dom) => {
         }
         const links = row.getElementsByTagName('a');
         const url = links[0].href;
-        memories.push({
-            url,
-            date: 
-                '' 
-                + date.getFullYear()
-                + '.' + date.getMonth()
-                + '.' + date.getDay()
-                + ' - ' + date.toLocaleTimeString().replaceAll(':','.')
-            });
+        memories.push({url, date});
     });
     for (let i=0; i<5; i++) {
         const memory = memories[i];
         const url = memory.url
                           .replace('javascript:downloadMemories(\'', '')
                           .replace('\');','');
-        setTimeout(() => downloadMemories(url,'output/' + memory.date), i*250);
+        setTimeout(() => downloadMemories(url, memory.date), i*250);
     }
 });
