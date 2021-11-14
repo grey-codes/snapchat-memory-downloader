@@ -7,5 +7,11 @@ const domProm = JSDOM.fromFile('memories_history.html', {
 });
 domProm.then((dom) => {
     const tags = dom.window.document.getElementsByTagName('tr');
-    console.log(tags);
+    const tableRows = [];
+    for (let i=0; i<tags.length; i++) {
+        const row = tags[i];
+        if (row.getElementsByTagName('a').length>0)
+            tableRows.push(row);
+    }
+    console.log(tableRows);
 });
