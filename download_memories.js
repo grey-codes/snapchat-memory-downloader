@@ -66,11 +66,11 @@ domProm.then((dom) => {
         const url = links[0].href;
         memories.push({url, date});
     });
-    for (let i=0; i<5; i++) {
+    for (let i=0; i<50; i++) {
         const memory = memories[i];
         const url = memory.url
                           .replace('javascript:downloadMemories(\'', '')
                           .replace('\');','');
-        setTimeout(() => downloadMemories(url, memory.date), i*250);
+        setTimeout(() => downloadMemories(url, memory.date), i*10);
     }
 });
