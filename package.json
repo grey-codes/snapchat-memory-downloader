@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dom-parser": "^0.1.6"
+    "dom-parser": "^0.1.6",
+    "jsdom": "^18.1.0"
   }
 }
