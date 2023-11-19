@@ -1,4 +1,6 @@
 # snapchat-memory-downloader
+# Note: This project is now archived as Snapchat has changed their export to handle this better.
+# I will consider following up with a separate project to automatically merge overlays onto images, and add EXIF data.
 
 ## Starting Guide
 
